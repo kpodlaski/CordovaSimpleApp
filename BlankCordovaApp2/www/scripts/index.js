@@ -92,22 +92,27 @@
 
     var colors = new Array("yellow", "green", "blue", "black");
     var actualColor = 3;
+    var lastPos = { x: -1, y: -1 };
+    var actPos = {x:-1, y:-1};
+
     function fingerMoved(e) {
-        var x = e.clientX;
-        var y = e.clientY;
+        lastPos.x = actPos.x;
+        lastPos.y = actPos.y;
+        actPos.x = e.touches[0].clientX;
+        actPos.y = e.touches[0].clientY;
         g.beginPath();
-        g.arc(x, y, 5, 0, 2 * Math.PI);
+        g.arc(actPos.x, actPos.y, 5, 0, 2 * Math.PI);
         g.fillStyle = colors[actualColor];
         g.fill();
-        document.getElementById('message').innerHTML = "<p>FingerMoved actual pos:("+x+","+y  +")</p>";
+        document.getElementById('message').innerHTML = "<p>FingerMoved actual pos:("+actPos.x+","+actPos.y  +")</p>";
     }
 
     function fingerDown(e) {
-        var x = e.clientX;
-        var y = e.clientY;
+        actPos.x = e.touches[0].clientX;
+        actPos.y = e.touches[0].clientY;
         actualColor = (actualColor + 1) % colors.length;
         g.beginPath();
-        g.arc(x, y, 10, 0, 2 * Math.PI);
+        g.arc(actPos.x, actPos.y, 10, 0, 2 * Math.PI);
         g.fillStyle = colors[actualColor];
         g.fill();
 
@@ -115,10 +120,8 @@
     }
 
     function fingerUp(e) {
-        var x = e.clientX;
-        var y = e.clientY;
         g.beginPath();
-        g.arc(x, y, 10, 0, 2 * Math.PI);
+        g.arc(lastPos.x, lastPos.y, 10, 0, 2 * Math.PI);
         g.fillStyle = colors[actualColor];
         g.fill();
         document.getElementById('message').innerHTML = "<p>FingerUp</p>";
